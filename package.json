@@ -44,7 +44,7 @@
     "bridge"
   ],
   "private": false,
-  "name": "@neutronstarer/npc",
+  "name": "@neutronstarer/webview_bridge_js",
   "author": "neutronstarer",
   "module": "dist/webview_bridge.esm.js",
   "size-limit": [
