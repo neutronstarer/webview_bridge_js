@@ -43,8 +43,11 @@
     "webview",
     "bridge"
   ],
-  "private": false,
-  "name": "@neutronstarer/webview_bridge_js",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "name": "@neutronstarer/webview_bridge",
   "author": "neutronstarer",
   "module": "dist/webview_bridge.esm.js",
   "size-limit": [
