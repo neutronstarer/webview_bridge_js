@@ -104,7 +104,7 @@ export class Bridge {
         addEventListener("message", this.receive)
         addEventListener("unload", this.unload)
         this.connect()
-        this.openUrl("https://webviewbridge/load?ns=" + encodeURIComponent(this.ns))
+        this.openUrl(`https://webviewbridge?action=load&ns=${encodeURIComponent(this.ns)}`)
     }
 
     private unload() {

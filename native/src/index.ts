@@ -7,13 +7,14 @@ class Native {
   constructor(ns: string){
       this.ns = ns
       this.send = (() => {
+        let key = `webviewbridge/messagehandler/${this.ns}`
           const wind = window as any
           try {
               // iOS
-              if (wind[this.ns].postMessage != undefined) {
+              if (wind[key].postMessage != undefined) {
                   return (message: any) => {
                       try {
-                          wind[this.ns].postMessage(JSON.stringify(message))
+                          wind[key].postMessage(JSON.stringify(message))
                           return true
                       } catch (error) {
                           console.error(`[Bridge][Native] send fail: ${error}`)
@@ -26,10 +27,10 @@ class Native {
           } catch (error) {
               try {
                   // Android
-                  if (wind["webkit"].messageHandlers[this.ns].postMessage != undefined) {
+                  if (wind["webkit"].messageHandlers[key].postMessage != undefined) {
                       return (message: any) => {
                           try {
-                              wind["webkit"].messageHandlers[this.ns].postMessage(JSON.stringify(message))
+                              wind["webkit"].messageHandlers[key].postMessage(JSON.stringify(message))
                               return true
                           } catch (error) {
                               console.error(`[Bridge][Native] send fail: ${error}`)
@@ -43,7 +44,7 @@ class Native {
                   return (message: any) => {
                       try {
                           this.messages.push(message)
-                          this.openUrl("https://webviewbridge/query?ns=" + encodeURIComponent(this.ns))
+                          this.openUrl(`https://webviewbridge?action=query&ns=${encodeURIComponent(this.ns)}"`)
                           return true
                       } catch (error) {
                           console.error(`[Bridge][Native] send fail: ${error}`)
@@ -123,12 +124,7 @@ class Bridge {
    * @returns json string of message array.
    */
   query(): string {
-      try {
-          return this.native.query()
-      } catch (error) {
-          console.error(error)
-          return "[]"
-      }
+    return this.native.query()
   }
   /**
    *  send message
@@ -237,7 +233,7 @@ class Bridge {
   private native: Native
   private nods: Map<String, Nod>
 }
-
+;
 const ns = "<ns>"
 const wind = window as any
 const key = `webviewbridge/${ns}`
