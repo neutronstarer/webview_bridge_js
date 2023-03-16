@@ -61,13 +61,13 @@ export class Bridge {
             }
             const message = JSON.parse(ev.data)
             const transmit = message[`${this.ns}/${this.id}/transmit`]
-            if (transmit != undefined) {
+            if (transmit !== undefined) {
                 const m = new Message(transmit["typ"], transmit["id"], transmit["method"], transmit["param"], transmit["error"])
                 this.npc.receive(m)
                 return
             }
             const connect = message[`${this.ns}/${this.id}/connect`]
-            if (connect != undefined) {
+            if (connect !== undefined) {
                 // did connect
                 if (this.connected) {
                     return
@@ -79,20 +79,19 @@ export class Bridge {
                     m[`${this.ns}/transmit`] = message
                     top?.postMessage(JSON.stringify(m), "*")
                 })
-                this.whenConnectSuccess.forEach(element => {
-                    element()
+                this.connectionResult.forEach(element => {
+                    element(undefined)
                 })
-                this.whenConnectSuccess.splice(0, this.whenConnectSuccess.length)
-                this.whenConnectFail.splice(0, this.whenConnectFail.length)
+                this.connectionResult.splice(0, this.connectionResult.length)
                 return
             }
             const load = message[`${this.ns}/load`]
-            if (load != undefined) {
+            if (load !== undefined) {
                 this.connect()
                 return
             }
-        } catch (error) {
-            console.error(error)
+        } catch (_) {
+          
         }
     }
 
@@ -101,8 +100,8 @@ export class Bridge {
             return
         }
         this.loaded = true
-        addEventListener("message", this.receive)
-        addEventListener("unload", this.unload)
+        addEventListener("message", this.receive.bind(this))
+        addEventListener("unload", this.unload.bind(this))
         this.connect()
         this.openUrl(`https://webviewbridge?action=load&ns=${encodeURIComponent(this.ns)}`)
     }
@@ -137,20 +136,24 @@ export class Bridge {
         m['from'] = this.id
         m[`${this.ns}/disconnect`] = {name: this.name}
         top?.postMessage(JSON.stringify(m), "*")
-        this.whenConnectFail.forEach(element => {
+        this.connectionResult.forEach(element => {
             element("disconnected")
         })
-        this.whenConnectSuccess.splice(0, this.whenConnectSuccess.length)
-        this.whenConnectFail.splice(0, this.whenConnectFail.length)
+        this.connectionResult.splice(0, this.connectionResult.length)
     }
 
     private wait(): Promise<void> {
         if (this.connected) {
-            return new Promise<void>((resolve) => { resolve() })
+            return Promise.resolve()
         }
         return new Promise<void>((resolve, reject) => {
-            this.whenConnectSuccess.push(resolve)
-            this.whenConnectFail.push(reject)
+            this.connectionResult.push((error: any)=>{
+                if (error === undefined || error === null) {
+                    resolve()
+                }else{
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -179,8 +182,7 @@ export class Bridge {
     private npc: NPC
     private connected = false
     private loaded = false
-    private whenConnectSuccess = new Array<() => void>()
-    private whenConnectFail = new Array<(error: any) => void>()
+    private connectionResult = new Array<(error: any) => void>()
     private ns: string
     private name?: string
     private id: string

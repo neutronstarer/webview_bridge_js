@@ -1,6 +1,7 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <label>{{msg}}</label>
   <button @click="click">下载</button>
 </template>
 
@@ -25,8 +26,10 @@ export default {
         this.cancelable = new Cancelable()
         const res = await this.bridge.deliver("download","/path", {cancelable: this.cancelable, onNotify: (param)=>{
           console.log(param)
+          this.msg = param
         }})
         console.log(res)
+        this.msg = res
         this.cancelable = undefined
       }else{
         this.cancelable.cancel()
@@ -38,6 +41,7 @@ export default {
     return {
       bridge: new Bridge("com.neutronstarer.webviewbridge", "homepage"),
       cancelable: undefined,
+      msg: "未开始",
     }
   }
 }

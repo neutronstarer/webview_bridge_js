@@ -1083,10 +1083,10 @@
   dependencies:
     "@neutronstarer/cancelable" "^4.2.0"
 
-"@neutronstarer/webview_bridge@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@neutronstarer/webview_bridge/-/webview_bridge-1.0.2.tgz#379f1c19612a3411f879544dfe6bde4f8cbf93c5"
-  integrity sha512-n1njzu2riQDERlL8CfwYRhUVTTlU+8rKGZoEqlYwIi4u08psQ+bNJRc/JkH0RzCLyjqVQuganVKY3NlOCR1Gyw==
+"@neutronstarer/webview_bridge@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@neutronstarer/webview_bridge/-/webview_bridge-1.0.6.tgz#615b0fd00d76d066c3f05f91a2d87302240eccb9"
+  integrity sha512-OneTQWfUEd/Jhtw1pobUT061RsXl407ny71d+xx7Ug+IcKQRsig9AodTAV9lx35/ifIPa8HALI4QKE8jh3SgSQ==
   dependencies:
     "@neutronstarer/npc" "^4.2.0"
 

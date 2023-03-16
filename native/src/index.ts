@@ -149,11 +149,11 @@ class Bridge {
       try {
           const message = JSON.parse(ev.data)
           const wind = ev.source as Window
-          const transmit = message[`${this.ns}/transmit`]
           if (process.env.NODE_ENV === "development") {
-            console.log(`[Bridge][Transimit] ${ev.data}`)
+            console.log(`[Bridge][Message] ${ev.data}`)
           }
-          if (transmit != undefined){
+          const transmit = message[`${this.ns}/transmit`]
+          if (transmit !== undefined){
               const {from} = message
               let o = this.nods.get(from)
               if (o == undefined){
@@ -166,7 +166,7 @@ class Bridge {
               return
           }
           const connect = message[`${this.ns}/connect`]
-          if (connect != undefined) {
+          if (connect !== undefined) {
               const {from} = message
               const {name} = connect
               let o = this.nods.get(from)
@@ -179,7 +179,7 @@ class Bridge {
               return
           }
           const disconnect = message[`${this.ns}/disconnect`]
-          if (disconnect != undefined){
+          if (disconnect !== undefined){
               const {from} = message
               const { name} = disconnect
               const o = this.nods.get(from)
@@ -194,15 +194,14 @@ class Bridge {
               this.native.send(message)
               return
           }
-      } catch (error) {
-          console.error(error)
-      }
+      } catch (_) {
+    }
   }
 
 
   private load(){
-      addEventListener("message", this.receive)
-      addEventListener("unload", this.unload)
+      addEventListener("message", this.receive.bind(this))
+      addEventListener("unload", this.unload.bind(this))
       // broadcast
       const m:{[key: string]: any} = {} 
       m[`${this.ns}/load`] = null
