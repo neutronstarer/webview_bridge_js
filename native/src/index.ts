@@ -90,11 +90,11 @@ class Nod {
       this.wind = wind
   }
 
-  map(): Map<string,string>{
-      const v = new Map<string,string>()
-      v.set(`id`, this.id)
-      v.set(`name`, this.name)
-      v.set(`href`, this.wind.location.href)    
+  map(): {[key:string]: string}{
+      const v: {[key:string]: string} = {}
+      v['id'] = this.id
+      v['name'] = this.name
+      v['href'] = this.wind.location.href
       return v
   }
 
@@ -204,8 +204,8 @@ class Bridge {
       addEventListener("message", this.receive)
       addEventListener("unload", this.unload)
       // broadcast
-      const m = new Map()
-      m.set(`${this.ns}/load`, null)
+      const m:{[key: string]: any} = {} 
+      m[`${this.ns}/load`] = null
       const broadcast = (wind: Window, message: string) => {
           wind.postMessage(message, "*")
           const f = wind.frames
@@ -221,10 +221,10 @@ class Bridge {
       removeEventListener("unload", this.unload)
       /// disconnect all nods
       this.nods.forEach(nod => {
-          const m = new Map()
-          m.set(`${this.ns}/disconnect`, {name: nod.name})
-          m.set("from", nod.id)
-          this.native.send(m)
+        const m:{[key: string]: any} = {} 
+        m['from'] = nod.id
+        m[`${this.ns}/disconnect`] = {name: nod.name}
+        this.native.send(m)
       })
       this.nods.clear()
   }

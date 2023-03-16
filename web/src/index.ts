@@ -74,9 +74,9 @@ export class Bridge {
                 }
                 this.connected = true
                 this.npc.connect((message) => {
-                    const m = new Map()
-                    m.set(`${this.ns}/transmit`, message)
-                    m.set("from", this.id)
+                    const m: {[key: string]: any} = {}
+                    m['from'] = this.id
+                    m[`${this.ns}/transmit`] = message
                     top?.postMessage(JSON.stringify(m), "*")
                 })
                 this.whenConnectSuccess.forEach(element => {
@@ -92,7 +92,7 @@ export class Bridge {
                 return
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -121,9 +121,9 @@ export class Bridge {
         if (this.connected) {
             return
         }
-        const m = new Map()
-        m.set(`${this.ns}/connect`, {name: this.name})
-        m.set("from", this.id)
+        const m: {[key:string]: any} = {}
+        m['from'] = this.id
+        m[`${this.ns}/connect`] = {name: this.name}
         top?.postMessage(JSON.stringify(m), "*")
     }
 
@@ -133,9 +133,9 @@ export class Bridge {
         }
         this.connected = false
         this.npc.disconnect()
-        const m = new Map()
-        m.set(`${this.ns}/disconnect`, {name: this.name})
-        m.set("from", this.id)
+        const m: {[key:string]: any} = {}
+        m['from'] = this.id
+        m[`${this.ns}/disconnect`] = {name: this.name}
         top?.postMessage(JSON.stringify(m), "*")
         this.whenConnectFail.forEach(element => {
             element("disconnected")
