@@ -1,6 +1,5 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
   <label>{{msg}}</label>
   <button @click="click">下载</button>
 </template>

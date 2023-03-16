@@ -1,5 +1,5 @@
 {
-  "version": "1.0.6",
+  "version": "1.0.7"  ,
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -69,6 +69,6 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@neutronstarer/npc": "^4.2.0"
+    "@neutronstarer/npc": "^4.2.2"
   }
 }
