@@ -111,8 +111,8 @@ export class Bridge {
             return
         }
         this.loaded = false
-        removeEventListener("message", this.receive)
-        removeEventListener("unload", this.unload)
+        removeEventListener("message", this.receive.bind(this))
+        removeEventListener("unload", this.unload.bind(this))
         this.disconnect()
     }
 

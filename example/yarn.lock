@@ -1076,19 +1076,19 @@
   resolved "https://registry.yarnpkg.com/@neutronstarer/cancelable/-/cancelable-4.2.0.tgz#fe870bc925a42c86671044649521b5bf7db4d0b1"
   integrity sha512-BXHwXSQ2sVrBrnJtjPIjGIuZB9YLoVm4P0y5Lbp15NYp7Y4b+YF1ITWp+6TLXYSqV/VwMhKpGgmy/KiOSiq6pQ==
 
-"@neutronstarer/npc@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@neutronstarer/npc/-/npc-4.2.0.tgz#95b188b36cc2bcad659fbb8b700b5b704366e50e"
-  integrity sha512-/DAFMiX3jjA3CYdDYfrGKo3kRvl0GHeX+t+G3Yeu4o+Xq+DQEepYHyX4bGIoMqwRaoefBjp1p29cc6y545wHzg==
+"@neutronstarer/npc@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@neutronstarer/npc/-/npc-4.2.2.tgz#5abf22b9881114f668c297a9be31bdb13d5c7014"
+  integrity sha512-rzmC1BHcvl+6KU9wakcjK4ItyzcRoGdby52JTlimkJTdqNGerGoYRYd27qxsVxSkU5kKi3QXCXFD4hlcU2HTQQ==
   dependencies:
     "@neutronstarer/cancelable" "^4.2.0"
 
-"@neutronstarer/webview_bridge@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@neutronstarer/webview_bridge/-/webview_bridge-1.0.6.tgz#615b0fd00d76d066c3f05f91a2d87302240eccb9"
-  integrity sha512-OneTQWfUEd/Jhtw1pobUT061RsXl407ny71d+xx7Ug+IcKQRsig9AodTAV9lx35/ifIPa8HALI4QKE8jh3SgSQ==
+"@neutronstarer/webview_bridge@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@neutronstarer/webview_bridge/-/webview_bridge-1.0.7.tgz#b612207df79cb606146b2f243a58809cd1601f02"
+  integrity sha512-scsVfSLD4ATL9vqt0DBeVNSCdlH2e2GHMwrcxc6G0qVIdk6rjkHljRmpas1kSvQRUcAJf/bGlQe9BVVoya6xIw==
   dependencies:
-    "@neutronstarer/npc" "^4.2.0"
+    "@neutronstarer/npc" "^4.2.2"
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"

@@ -1,7 +1,14 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <label>{{msg}}</label>
-  <button @click="click">下载</button>
+  <ol>
+    <li>
+    <label>{{msg}}</label>
+  </li>
+  <li >
+    <button @click="click">{{buttonTitle}}</button>
+  </li>
+</ol>
+
 </template>
 
 <script>
@@ -22,15 +29,22 @@ export default {
   methods:{
     async click(){
       if (this.cancelable == undefined) {
+        this.buttonTitle = "暂停"
         this.cancelable = new Cancelable()
-        const res = await this.bridge.deliver("download","/path", {cancelable: this.cancelable, onNotify: (param)=>{
+        try {
+          const res = await this.bridge.deliver("download","/path", {cancelable: this.cancelable, onNotify: (param)=>{
           console.log(param)
           this.msg = param
         }})
-        console.log(res)
         this.msg = res
         this.cancelable = undefined
+        } catch (e) {
+          this.msg = e
+          this.cancelable = undefined
+        }
+
       }else{
+        this.buttonTitle = "下载"
         this.cancelable.cancel()
         this.cancelable = undefined
       }
@@ -41,6 +55,7 @@ export default {
       bridge: new Bridge("com.neutronstarer.webviewbridge", "homepage"),
       cancelable: undefined,
       msg: "未开始",
+      buttonTitle: "下载",
     }
   }
 }
