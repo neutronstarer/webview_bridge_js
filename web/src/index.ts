@@ -53,7 +53,7 @@ export class Bridge {
         this.unload()
     }
 
-    private receive(ev: any): any {
+    private receive = (ev: any) => {
         try {
             const wind = ev.source as Window
             if (wind != top) {
@@ -100,8 +100,8 @@ export class Bridge {
             return
         }
         this.loaded = true
-        addEventListener("message", this.receive.bind(this))
-        addEventListener("unload", this.unload.bind(this))
+        addEventListener("message", this.receive)
+        addEventListener("unload", this.unload)
         this.connect()
         this.openUrl(`https://webviewbridge?action=load&ns=${encodeURIComponent(this.ns)}`)
     }
@@ -111,8 +111,8 @@ export class Bridge {
             return
         }
         this.loaded = false
-        removeEventListener("message", this.receive.bind(this))
-        removeEventListener("unload", this.unload.bind(this))
+        removeEventListener("message", this.receive)
+        removeEventListener("unload", this.unload)
         this.disconnect()
     }
 

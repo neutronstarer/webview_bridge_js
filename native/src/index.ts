@@ -22,7 +22,7 @@ class Native {
                         }
                     }
                 } else {
-                    throw `[Bridge][Native] not found android handler`
+                    throw `[Bridge][Native] android handler not found`
                 }
             } catch (error) {
                 try {
@@ -38,7 +38,7 @@ class Native {
                             }
                         }
                     } else {
-                        throw `[Bridge][Native] not found ios handler`
+                        throw `[Bridge][Native] ios handler not found`
                     }
                 } catch (error) {
                     return (message: any) => {
