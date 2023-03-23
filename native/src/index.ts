@@ -33,7 +33,7 @@ class Native {
             }
             // other
             this.messages.push(m)
-            this.openUrl(`https://webviewbridge?action=query&namespace=${encodeURIComponent(this.namespace)}"`)
+            this.openUrl(`https://webviewbridge?action=query&namespace=${encodeURIComponent(this.namespace)}`)
         } catch (error) {
             console.error(`[Bridge][Native] send fail: ${error}`)
         }

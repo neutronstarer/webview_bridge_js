@@ -107,7 +107,7 @@ export class Bridge {
         this.openUrl(`https://webviewbridge?action=load&namespace=${encodeURIComponent(this.namespace)}`)
     }
 
-    private unload() {
+    private unload = ()=> {
         if (this.loaded == false) {
             return
         }
