@@ -1,14 +1,14 @@
 import { NPC, Cancelable, Handle, Notify, Message } from "@neutronstarer/npc"
-export {Cancelable, Handle, Notify}
+export { Cancelable, Handle, Notify }
 export class Bridge {
     /**
      * 
-     * @param ns namespace
-     * @param name bridge name
+     * @param namespage namespace
+     * @param info bridge info
      */
-    constructor(ns: string, name?: string) {
-        this.ns = ns
-        this.name = name
+    constructor(namespage: string, info?: {[key: string]: any}) {
+        this.namespace = namespage
+        this.info = info
         this.npc = new NPC()
         this.id = this.genUuid()
         this.load()
@@ -18,7 +18,7 @@ export class Bridge {
      * @param method method
      * @param handle handle
      */
-    on(method: string, handle: Handle | null) {
+    on(method: string, handle: Handle|null) {
         this.npc.on(method, handle)
     }
     /**
@@ -55,29 +55,34 @@ export class Bridge {
 
     private receive = (ev: any) => {
         try {
-            const wind = ev.source as Window
-            if (wind != top) {
+            const {source, data} = ev
+            if (source !== top) {
                 return
             }
-            const message = JSON.parse(ev.data)
-            const transmit = message[`${this.ns}/${this.id}/transmit`]
-            if (transmit !== undefined) {
-                const m = new Message(transmit["typ"], transmit["id"], transmit["method"], transmit["param"], transmit["error"])
+            const {typ, to, body} = JSON.parse(data)[this.namespace]
+            if (typ === "load") {
+                // hub did load
+                this.connect()
+                return
+            }
+            if (to !== this.id) {
+                return
+            }
+            if (typ == "transmit") {
+                // transmit
+                const m = new Message(body.typ, body.id, body.method, body.param, body.error)
                 this.npc.receive(m)
                 return
             }
-            const connect = message[`${this.ns}/${this.id}/connect`]
-            if (connect !== undefined) {
-                // did connect
-                if (this.connected) {
+            if (typ == "connect"){
+                  // did connect
+                  if (this.connected) {
                     return
                 }
                 this.connected = true
                 this.npc.connect((message) => {
-                    const m: {[key: string]: any} = {}
-                    m['from'] = this.id
-                    m[`${this.ns}/transmit`] = message
-                    top?.postMessage(JSON.stringify(m), "*")
+                    const m = {typ: "transmit", from: this.id, body: message}
+                    this.send(m)
                 })
                 this.connectionResult.forEach(element => {
                     element(undefined)
@@ -85,13 +90,8 @@ export class Bridge {
                 this.connectionResult.splice(0, this.connectionResult.length)
                 return
             }
-            const load = message[`${this.ns}/load`]
-            if (load !== undefined) {
-                this.connect()
-                return
-            }
         } catch (_) {
-          
+
         }
     }
 
@@ -103,7 +103,8 @@ export class Bridge {
         addEventListener("message", this.receive)
         addEventListener("unload", this.unload)
         this.connect()
-        this.openUrl(`https://webviewbridge?action=load&ns=${encodeURIComponent(this.ns)}`)
+        // tell native to load hub
+        this.openUrl(`https://webviewbridge?action=load&namespace=${encodeURIComponent(this.namespace)}`)
     }
 
     private unload() {
@@ -120,10 +121,8 @@ export class Bridge {
         if (this.connected) {
             return
         }
-        const m: {[key:string]: any} = {}
-        m['from'] = this.id
-        m[`${this.ns}/connect`] = {name: this.name}
-        top?.postMessage(JSON.stringify(m), "*")
+        const m = {typ: "connect", from: this.id, body: {info: this.info}}
+        this.send(m)
     }
 
     private disconnect() {
@@ -132,25 +131,32 @@ export class Bridge {
         }
         this.connected = false
         this.npc.disconnect()
-        const m: {[key:string]: any} = {}
-        m['from'] = this.id
-        m[`${this.ns}/disconnect`] = {name: this.name}
-        top?.postMessage(JSON.stringify(m), "*")
+        const m = {typ: "disconnect", from: this.id, body: {info: this.info}}
+        this.send(m)
         this.connectionResult.forEach(element => {
             element("disconnected")
         })
         this.connectionResult.splice(0, this.connectionResult.length)
     }
 
+    private send(m: {[key: string]: any}){
+        const message: { [key: string]: any } = {}
+        message[this.namespace] = m
+        top?.postMessage(JSON.stringify(message), "*")
+    }
+
     private wait(): Promise<void> {
+        if (!this.loaded){
+            return Promise.reject("disconnected")
+        }
         if (this.connected) {
             return Promise.resolve()
         }
         return new Promise<void>((resolve, reject) => {
-            this.connectionResult.push((error: any)=>{
+            this.connectionResult.push((error: any) => {
                 if (error === undefined || error === null) {
                     resolve()
-                }else{
+                } else {
                     reject(error)
                 }
             })
@@ -180,10 +186,10 @@ export class Bridge {
     }
 
     private npc: NPC
-    private connected = false
     private loaded = false
+    private connected = false
     private connectionResult = new Array<(error: any) => void>()
-    private ns: string
-    private name?: string
+    private namespace: string
+    private info?: any
     private id: string
 }
