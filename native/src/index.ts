@@ -26,7 +26,7 @@ class Native {
             }
             try {
                 // ios
-                wind.webviewbridge.postMessage(s)
+                wind.webkit.messageHandlers.webviewbridge.postMessage(s)
                 return
             } catch (_) {
 
