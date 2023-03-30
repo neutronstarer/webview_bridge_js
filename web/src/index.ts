@@ -182,7 +182,7 @@ export class Bridge {
         document.documentElement.appendChild(iframe)
         setTimeout(() => {
             document.documentElement.removeChild(iframe)
-        }, 1)
+        }, 200)
     }
 
     private npc: NPC

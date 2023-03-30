@@ -19,14 +19,14 @@ class Native {
             const s = JSON.stringify(m)
             try {
                 // android
-                wind.webviewbridge.postMessage(s)
+                wind[`com.neutronstarer.webviewbridge/${this.namespace}`].postMessage(s)
                 return
             } catch (_) {
 
             }
             try {
                 // ios
-                wind.webkit.messageHandlers.webviewbridge.postMessage(s)
+                wind.webkit.messageHandlers["com.neutronstarer.webviewbridge"].postMessage(s)
                 return
             } catch (_) {
 
@@ -59,7 +59,7 @@ class Native {
         document.documentElement.appendChild(iframe)
         setTimeout(() => {
             document.documentElement.removeChild(iframe)
-        }, 1)
+        }, 200)
     }
     private namespace: string
     private messages: any[] = []
